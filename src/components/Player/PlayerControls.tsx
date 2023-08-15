@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 // import { currentTrackIdState, currentTrackState, isPlayingState } from "../../../atoms/songAtom";
-import spotifyApi from "@/lib/spotify";
+
 import { PlayIcon, PauseIcon, BackwardIcon, ForwardIcon } from "@heroicons/react/24/solid";
-import { useSession } from "next-auth/react";
+
 import { currentTrackIdState, nextTrackState, previousTrackState, trackDurationState, trackProgressState } from "../../../atoms/songAtom";
 import { millisToMinutesAndSeconds } from "@/lib/time";
-
+import { handlePlayPause } from "@/lib/controls";
 
 // TODO: Figure out Previous and Next Songs
 
@@ -32,47 +32,32 @@ const PlayerControls = ({ isPlaying, setIsPlaying, songInfo }: { isPlaying: bool
     }, [duration, progress])
     
 
-    const handlePlayPause = () => {
-        spotifyApi.getMyCurrentPlaybackState().then(data => {
-            if(data.body.is_playing) {
-                spotifyApi.pause().then(() => {
-                    setIsPlaying(false);
-                });
-            } else {
-                spotifyApi.play().then(() => {
-                    setIsPlaying(true);
-                });
-            }
-        }); 
-    }
+    // const handlePreviousSong = () => {
+    //     console.log(previousSong);
+    //     if(previousSong) {
+    //         setCurrentTrackId(previousSong.id);
+    //         const { name, artists, album, type, duration_ms: duration, id, uri } = previousSong;
+    //         setIsPlaying(true);
+    //         setTrackDuration(duration);
+    //         console.log(name);
+    //         spotifyApi.play({
+    //             uris: [uri]
+    //         })
+    //     }
+    // }
 
-    const handlePreviousSong = () => {
-        console.log(previousSong);
-        if(previousSong) {
-            setCurrentTrackId(previousSong.id);
-            const { name, artists, album, type, duration_ms: duration, id, uri } = previousSong;
-            setIsPlaying(true);
-            setTrackDuration(duration);
-            console.log(name);
-            spotifyApi.play({
-                uris: [uri]
-            })
-        }
-    }
-
-     const handleNextSong = () => {
-        console.log(nextSong);
-        if(nextSong) {
-            setCurrentTrackId(nextSong.id);
-            const { name, artists, album, type, duration_ms: duration, id, uri } = nextSong;
-            setIsPlaying(true);
-            setTrackDuration(duration);
-            console.log(name);
-            spotifyApi.play({
-                uris: [uri]
-            })
-        }
-    }
+    //  const handleNextSong = () => {
+    //     if(nextSong) {
+    //         setCurrentTrackId(nextSong.id);
+    //         const { name, artists, album, type, duration_ms: duration, id, uri } = nextSong;
+    //         setIsPlaying(true);
+    //         setTrackDuration(duration);
+    //         console.log(name);
+    //         spotifyApi.play({
+    //             uris: [uri]
+    //         })
+    //     }
+    // }
 
     
  
@@ -80,17 +65,21 @@ const PlayerControls = ({ isPlaying, setIsPlaying, songInfo }: { isPlaying: bool
         <div className="flex flex-col basis-1/3">
             <div className="flex justify-center mb-2">
                 <button className="flex justify-center items-center text-neutral-300 hover:text-neutral-100 scale-100 hover:scale-110 transition-all">
-                    <BackwardIcon onClick={handlePreviousSong} className="w-5"  />
+                    <BackwardIcon 
+                    // onClick={handlePreviousSong} 
+                    className="w-5"  />
                 </button>
                 <button className="rounded-full p-2 flex items-center justify-center bg-white mr-5 ml-5 scale-100 hover:scale-110 transition-all">
                     {isPlaying ? (
-                        <PauseIcon onClick={handlePlayPause} className="w-5 transition-all text-neutral-900" />
+                        <PauseIcon onClick={() => handlePlayPause(setIsPlaying)} className="w-5 transition-all text-neutral-900" />
                     ) : ( 
-                        <PlayIcon onClick={handlePlayPause} className="w-5 transition-all text-neutral-900" />
+                        <PlayIcon onClick={() => handlePlayPause(setIsPlaying)} className="w-5 transition-all text-neutral-900" />
                     )} 
                 </button>
                 <button className="flex justify-center items-center text-neutral-300 hover:text-neutral-100 scale-100 hover:scale-110 transition-all">
-                    <ForwardIcon onClick={handleNextSong} className="w-5" />
+                    <ForwardIcon 
+                        // onClick={handleNextSong}
+                        className="w-5" />
                 </button>
             </div>
             <div className="flex items-center">

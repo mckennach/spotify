@@ -13,7 +13,6 @@ const Header = () => {
     return (
         <header className="">
             <UserHeaderMenu session={session} status={status} />
-            <PlaylistHeading />
         </header>
     );
    

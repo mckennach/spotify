@@ -4,7 +4,7 @@ const Layout = ({ children }: { children: ReactNode}) => {
  
   return (
     <>
-      <main className="bg-neutral-900">{children}</main>
+      <main className="bg-neutral-900 min-w-[385px]">{children}</main>
     </>
   )
 }

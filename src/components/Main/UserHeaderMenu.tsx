@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserCircleIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 import { signOut } from "next-auth/react";
-import spotifyApi from "@/lib/spotify";
+import useSpotify from "@/hooks/useSpotify";
 
 const classNames = (...classes: string[]) => {
     return classes.filter(Boolean).join(' ');
@@ -19,12 +19,12 @@ const Image = ({session}: {session: Session}) => {
 
 const UserHeaderMenu = ({ session, status }: { session: any, status: String }) => {
     // const accountLink = spotifyApi.getUser();
-
+    const spotifyApi = useSpotify();
 
     if(status === 'loading' && !session) return null;
     
     return (
-        <Menu as="div" className=" inline-block text-left absolute top-5 right-8">
+        <Menu as="div" className="z-1 inline-block text-left absolute top-5 right-8">
             <div>
                 <Menu.Button className="flex items-center bg-neutral-900  opacity-90 hover:opacity-80 cursor-pointer rounded-full p-0.5">
                     <Image session={session} />
@@ -38,7 +38,7 @@ const UserHeaderMenu = ({ session, status }: { session: any, status: String }) =
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute  right-0 mt-2 w-56 origin-top-right divide-y divide-neutral-500 rounded-md bg-neutral-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute z-50 right-0 mt-2 w-56 origin-top-right divide-y divide-neutral-500 rounded-md bg-neutral-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div className="py-1">
                             <Menu.Item>
                             {({ active }) => (

@@ -4,7 +4,7 @@ import { useRecoilState} from "recoil";
 import { currentTrackIdState, trackProgressState, isPlayingState } from "../../../atoms/songAtom";
 import { useSession } from "next-auth/react";
 import useSongInfo from "@/hooks/useSongInfo";
-import spotifyApi from "@/lib/spotify";
+import useSpotify from "@/hooks/useSpotify";
 import { millisToMinutesAndSeconds } from "@/lib/time";
 import PlayerControls from "./PlayerControls";
 import VolumeControls from "./VolumeControls";
@@ -14,6 +14,7 @@ import PlayerSongView from "./PlayerSongView";
 
 const Player = () => {
     const { data: session } = useSession();
+    const spotifyApi = useSpotify();
     const songInfo = useSongInfo();
     const [ currentTrackId, setCurrentTrackId ] = useRecoilState(currentTrackIdState);
     const [ isPlaying, setIsPlaying ] = useRecoilState(isPlayingState);

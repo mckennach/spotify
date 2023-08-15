@@ -6,6 +6,8 @@ import { playlistIdState, playlistState } from "../../../atoms/playlistAtom";
 import useSpotify from "@/hooks/useSpotify";
 import PlaceholderImage from "../PlaceholderImage";
 import LoadingScreen from "../LoadingScreen";
+import Image from "next/image";
+import { imageLoader } from "@/lib/images";
 const PlaylistHeading = () => {
     const { data: session, status } = useSession();
     const [ color, setColor ] = useState('');
@@ -59,7 +61,7 @@ const PlaylistHeading = () => {
     const owner = user ? user?.display_name : playlist?.owner?.display_name;
     const userImage = user ? user?.images?.[0].url : null;
 
-    
+    console.log(playlist);
 
     return(
         <section className={`flex items-end space-x-7 bg-gradient-to-b to-neutral-800 px-5 py-5 ${color} h-80`}>
@@ -77,10 +79,19 @@ const PlaylistHeading = () => {
                 <p className="text-xs">{playlistTitle}</p>
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold mb-1">{ playlist?.name }</h1>
                 <div>
-                    <div className="text-xs flex">
+                    <div className="text-xs flex flex-wrap space-y-0">
                         {
                             userImage ? (
-                                <img src={userImage} alt={`${owner} Image`} className="w-4 mr-2 rounded-full" />
+                                // <Image
+                                //     src={userImage}
+                                //     loader={imageLoader}
+                                //     alt={`${owner} Image`}
+                                //     width={40}
+                                //     height={40}
+                                //     quality={100}
+                                //     className="w-4 h-4 mr-2 mb-1 rounded-full"
+                                //      />
+                                <img src={userImage} alt={`${owner} Image`} className="w-4 h-4 mr-2 mb-1 rounded-full" />
                             ) : (
                                 <></>
                             ) 

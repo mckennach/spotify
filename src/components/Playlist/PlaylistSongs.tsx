@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { playlistState } from "../../../atoms/playlistAtom";
 import { ClockIcon } from "@heroicons/react/24/outline";
-import Song from './Song';
-const Songs = () => {
+import Song from '../Main/Song';
+const PlaylistSongs = () => {
     const playlist = useRecoilValue(playlistState);
+    const [ selectedTrackId, setSelectedTrackId ] = useState('');
+
     
     return (
          <div className="text-sm text-neutral-400">
@@ -32,7 +34,7 @@ const Songs = () => {
                         const nextIndex = i - 1;
                         const prevSong = i > 0 ? playlist?.tracks?.items?.[previousIndex]?.track : false;
                         const nextSong = i - 1 !== playlist?.tracks?.items.length ? playlist?.tracks?.items?.[nextIndex]?.track : false;
-                        return <Song nextSong={prevSong}  previousSong={nextSong} key={item.track.id} track={item.track} order={i} />
+                        return <Song nextSong={prevSong}  previousSong={nextSong} key={item.track.id} playlistId={playlist.id} track={item.track} order={i} selectedTrackId={selectedTrackId} setSelectedTrackId={setSelectedTrackId} />
                     })}
                 </div>
 
@@ -44,4 +46,4 @@ const Songs = () => {
 
 }
 
-export default Songs;
+export default PlaylistSongs;
