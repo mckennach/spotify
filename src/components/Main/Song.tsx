@@ -1,8 +1,6 @@
 
 import { millisToMinutesAndSeconds } from "@/lib/time";
-import { IAlbum, IAlbumDisplay, IArtist, ITrack } from '@/types/tracks';
-import { IImage, IName } from "@/types/types";
-import { useSession } from "next-auth/react";
+import { IArtist, ITrack } from '@/types/tracks';
 import { useRecoilState } from "recoil";
 
 
