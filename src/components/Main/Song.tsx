@@ -17,8 +17,6 @@ import { currentTrackIdState, isPlayingState, nextTrackState, previousTrackState
 
 
 // Libs
-
-import useSpotify from "@/hooks/useSpotify";
 import { playSong, handlePlaylistPlayPause } from "@/lib/controls";
 
 
