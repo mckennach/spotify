@@ -3,8 +3,8 @@ import { useRecoilValue } from "recoil";
 import { playlistState } from "../../../atoms/playlistAtom";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Song from '../Main/Song';
-import { ITrack, ITrackItem } from "@/types/tracks";
-import { IPlaylist } from "@/types/playlists";
+import { ITrack, ITrackItem } from "@/types/types";
+
 const PlaylistSongs = () => {
     const playlist = useRecoilValue(playlistState);
     const [ selectedTrackId, setSelectedTrackId ] = useState('');

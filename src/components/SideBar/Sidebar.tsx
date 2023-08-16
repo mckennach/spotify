@@ -13,7 +13,7 @@ import Image from "next/image";
 import { viewState } from "../../../atoms/viewAtom";
 import { playlistIdState, playlistsState } from "../../../atoms/playlistAtom";
 import { imageLoader } from "@/lib/images";
-import { IPlaylist } from "@/types/playlists";
+import { IPlaylist } from "@/types/types";
 
 const Sidebar = () => {
     const spotifyApi = useSpotify();

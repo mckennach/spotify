@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { imageLoader } from "@/lib/images";
-import { ITrack, IArtist } from "@/types/tracks";
+import { ITrack, IArtist } from "@/types/types";
 import PlaceholderImage from "../PlaceholderImage";
 const PlayerSongView = ({ songInfo }: { songInfo: ITrack}) => {
     const { name, artists, album, type, duration_ms: duration, id, uri }: ITrack = songInfo;

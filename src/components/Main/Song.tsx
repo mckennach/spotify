@@ -1,6 +1,7 @@
 
 import { millisToMinutesAndSeconds } from "@/lib/time";
-import { IArtist, ITrack } from '@/types/tracks';
+
+import { IArtist, ITrack } from "@/types/types";
 import { useRecoilState } from "recoil";
 
 

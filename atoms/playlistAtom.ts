@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { IPlaylist } from "@/types/playlists";
+import { IPlaylist } from "@/types/types";
 
 export const playlistsState = atom({
     key: 'playslistsState',

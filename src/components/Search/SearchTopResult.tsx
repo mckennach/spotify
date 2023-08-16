@@ -4,8 +4,8 @@ import { ImageLoader } from "next/image";
 import { imageLoader } from "@/lib/images";
 import PlaceholderImage from "../PlaceholderImage";
 import { millisToMinutesAndSeconds } from "@/lib/time";
-import { IImage, IImageArray } from "@/types/types";
-import { IArtist, ITrack } from "@/types/tracks";
+import { IImage, IImageArray, IArtist, ITrack } from "@/types/types";
+
 const SearchTopResult = ({ searchData }: { searchData: any }) => {
     const [ topArtist, setTopArtist ] = useState(false);
     const [ topSongs, setTopSongs ] = useState([]);
