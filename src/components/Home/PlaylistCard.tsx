@@ -4,6 +4,9 @@ import Image from "next/image";
 import PlaceholderImage from "../PlaceholderImage";
 import { useSession } from "next-auth/react";
 
+// Types
+import { IImage } from "@/types/types";
+
 // Atoms
 import { playlistIdPlayingState, playlistIdState } from "../../../atoms/playlistAtom";
 import { currentTrackIdState, trackDurationState } from "../../../atoms/songAtom";
@@ -15,9 +18,11 @@ import { imageLoader } from "@/lib/images";
 import { handlePlaylistPlayPause } from "@/lib/controls";
 
 
+
 const PlaylistCard = ({ playlist, isPlaying, setIsPlaying }: { playlist: any, isPlaying: boolean, setIsPlaying: any}) => {
     const { data: session } = useSession();
-    const { id, name, images, type }: { id: string, name: string, images: string[], type: string} = playlist;
+    const { id, name, images, type }: { id: string, name: string, images: IImage[], type: string} = playlist;
+    const { url }: { url: string } = images[0];
     const isActive = '';
     const [ playlistIdPlaying, setPlaylistIdPlaying ] = useRecoilState(playlistIdPlayingState);
     const [ playlistId, setPlaylistId ] = useRecoilState(playlistIdState);
@@ -32,13 +37,13 @@ const PlaylistCard = ({ playlist, isPlaying, setIsPlaying }: { playlist: any, is
              onClick={() => {
                     setPlaylistId(id)
                     setActiveView('playlist');
-                }}     
+            }}     
             className="relative  h-full">
                     {images?.length > 0 ?
                         (
                             <Image 
                                 loader={imageLoader}
-                                src={images[0].url} 
+                                src={url} 
                                 alt={`${name} ${type}`}
                                 width={80}
                                 height={80}

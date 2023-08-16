@@ -3,10 +3,17 @@ import { useRecoilValue } from "recoil";
 import { playlistState } from "../../../atoms/playlistAtom";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Song from '../Main/Song';
+import { ITrack, ITrackItem } from "@/types/tracks";
+import { IPlaylist } from "@/types/playlists";
 const PlaylistSongs = () => {
     const playlist = useRecoilValue(playlistState);
     const [ selectedTrackId, setSelectedTrackId ] = useState('');
+    
+    interface IItem {
+        track: ITrack
+    }
 
+    console.log(playlist);
     
     return (
          <div className="text-sm text-neutral-400">
@@ -30,11 +37,14 @@ const PlaylistSongs = () => {
                 <hr className="border-t-[0.1px] border-neutral-500"/>
                 <div className="flex flex-col space-y-1 pb-10">
                     {playlist?.tracks?.items.map((item, i) => {   
+                        console.log(item);
                         const previousIndex = i + 1;
                         const nextIndex = i - 1;
                         const prevSong = i > 0 ? playlist?.tracks?.items?.[previousIndex]?.track : false;
                         const nextSong = i - 1 !== playlist?.tracks?.items.length ? playlist?.tracks?.items?.[nextIndex]?.track : false;
-                        return <Song nextSong={prevSong}  previousSong={nextSong} key={item.track.id} playlistId={playlist.id} track={item.track} order={i} selectedTrackId={selectedTrackId} setSelectedTrackId={setSelectedTrackId} />
+                        const mainItem: ITrackItem  = item; 
+                        const mainTrack: ITrack = mainItem.track;
+                        return <Song nextSong={prevSong}  previousSong={nextSong} key={i} playlistId={playlist.id} track={mainTrack} order={i} selectedTrackId={selectedTrackId} setSelectedTrackId={setSelectedTrackId} />
                     })}
                 </div>
 

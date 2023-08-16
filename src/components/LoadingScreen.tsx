@@ -1,5 +1,5 @@
 
-const LoadingScreen = ({ color }: { color: String }) => {
+const LoadingScreen = ({ color }: { color: String | undefined | null }) => {
     return (
         <div className={`flex items-center justify-center space-x-7 bg-gradient-to-b to-neutral-800 px-5 py-5 ${color} h-80`}>
              <div 

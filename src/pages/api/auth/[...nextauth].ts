@@ -1,9 +1,6 @@
 import NextAuth from "next-auth/next";
 import SpotifyProvider from "next-auth/providers/spotify";
 import { LOGIN_URL } from "@/lib/spotify";
-import type { JWT } from "next-auth/jwt";
-import type { User, Account } from "next-auth";
-import type { Session } from "next-auth";
 import spotifyApi from "@/lib/spotify";
 
 

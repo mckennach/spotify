@@ -29,7 +29,8 @@ const SearchView = () => {
     const debouncedSearchResults = useCallback(
         debounce((searchInput) => {
             spotifyApi.search(searchInput, ['artist', 'track'], { limit: 4 }).then((data) => {
-                setSearchData(data.body);
+                const { body }: { body: any } = data;
+                setSearchData(body);
             });
         }, 1000), []
     );

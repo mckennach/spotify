@@ -1,11 +1,16 @@
 
 import { millisToMinutesAndSeconds } from "@/lib/time";
-import { Album, Track } from '@/types/Tracks';
+import { IAlbum, IAlbumDisplay, IArtist, ITrack } from '@/types/tracks';
+import { IImage, IName } from "@/types/types";
 import { useSession } from "next-auth/react";
 import { useRecoilState } from "recoil";
 
-// Icons
+
+// Components
 import { PlayIcon, PauseIcon, BackwardIcon, ForwardIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
+import PlaceholderImage from "../PlaceholderImage";
+import { imageLoader } from "@/lib/images";
 
 
 // Atoms
@@ -19,20 +24,21 @@ import useSpotify from "@/hooks/useSpotify";
 import { playSong, handlePlaylistPlayPause } from "@/lib/controls";
 
 
-const Song = ({ order, track, previousSong, nextSong, playlistId, selectedTrackId, setSelectedTrackId }: { order: number, track: Track, previousSong: any, nextSong: any, playlistId: string, selectedTrackId: string, setSelectedTrackId: any }) => {
+const Song = ({ order, track, previousSong, nextSong, playlistId, selectedTrackId, setSelectedTrackId }: { order: number, track: ITrack | null | undefined, previousSong: any, nextSong: any, playlistId: string, selectedTrackId: string, setSelectedTrackId: any }) => {
     
-    const { data: session } = useSession();
-    const spotifyApi = useSpotify();
+    // const { data: session } = useSession();
+    // const spotifyApi = useSpotify();
     const [ currentTrackId, setCurrentTrackId ] = useRecoilState(currentTrackIdState);
     const [ isPlaying, setIsPlaying ] = useRecoilState(isPlayingState);
     const [ trackDuration, setTrackDuration ] = useRecoilState(trackDurationState);
     const [ playlistIdPlaying, setPlaylistIdPlaying ] = useRecoilState(playlistIdPlayingState);
-    const [ nextTrack, setNextTrack ] = useRecoilState(nextTrackState);
-    const [ previoustTrack, setPreviousTrack ] = useRecoilState(previousTrackState);
+    // const [ nextTrack, setNextTrack ] = useRecoilState(nextTrackState);
+    // const [ previoustTrack, setPreviousTrack ] = useRecoilState(previousTrackState);
 
-    const { name, artists, album, type, duration_ms: duration, id, uri } = track;
-    const { images, name: albumName }: any = album;
-    const artistList = artists.map(artist => artist.name).join('');
+
+    const { name, artists, album, type, duration_ms: duration, id, uri }: any = track;
+    const { images, name: albumName } = album;
+    const artistList = artists.map((artist: IArtist) => artist.name).join('');
     
 
     return (
@@ -55,7 +61,22 @@ const Song = ({ order, track, previousSong, nextSong, playlistId, selectedTrackI
                     </div>
                     <span className={`${ isPlaying && currentTrackId == id ? 'hidden' : 'block group-hover:hidden' }`}>{ order + 1 }</span>
                 </div>
-                <img src={images[0].url} alt={`${name} ${type}`} className="w-10 h-10" />   
+                {
+                    images ? (
+                        <Image 
+                            loader={imageLoader}
+                            src={images[0].url}
+                            alt={`${name} ${type}`}
+                            className="w-10 h-10"
+                            width={images[0].width}
+                            height={images[0].height}
+                            quality={100}
+                        />
+                    ) : (
+                        <PlaceholderImage classes="w-10 h-10" />
+                    ) 
+                }
+                
                 <div className="">
                     <p className="w-36 lg:w-64 text-neutral-300 truncate">{ name }</p>
                     <p className="w-40 truncate text-xs">{ artistList }</p>

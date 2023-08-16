@@ -1,17 +1,20 @@
 import spotifyApi from "./spotify";
 
 
-export const playSong = (id: string, playlistId?: string, uri: string, duration: number, setCurrentTrackId: any, setIsPlaying: any, setTrackDuration: any, setPlaylistIdPlaying?: any) => {
+export const playSong = (id: string, playlistId?: string, uri?: string, duration?: number, setCurrentTrackId?: any, setIsPlaying?: any, setTrackDuration?: any, setPlaylistIdPlaying?: any) => {
     setCurrentTrackId(id);
     setIsPlaying(true);
     setTrackDuration(duration);
-    spotifyApi.play({
-        uris: [uri]
-    }).then(() => {
-        if(setPlaylistIdPlaying) {
-            setPlaylistIdPlaying(playlistId);
-        }
-    })
+    if(uri) {
+        spotifyApi.play({
+            uris: [uri]
+        }).then(() => {
+            if(setPlaylistIdPlaying) {
+                setPlaylistIdPlaying(playlistId);
+            }
+        })
+    }
+    
 }
 
 export const pauseSong = (setIsPlaying: any, setPlaylistIdPlaying?: any) => {
@@ -30,7 +33,7 @@ export const handlePlaylistPlayPause = async (session: any, setIsPlaying: any, i
             const { body } = data;
             if(body.total > 0) { 
                 const { track } = body.items?.[0];
-                const { id: setId , uri, duration_ms: duration }: { id: string, uri: string } = track;
+                const { id: setId , uri, duration_ms: duration }: any = track;
                 if(isPlaying && id == playlistIdPlaying) {
                     pauseSong(setIsPlaying, setPlaylistIdPlaying);
                 } else {

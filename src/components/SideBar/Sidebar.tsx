@@ -1,13 +1,19 @@
-import { HomeIcon, MagnifyingGlassIcon, BuildingLibraryIcon } from "@heroicons/react/24/outline";
+// Hooks
 import { useEffect, useState } from "react";
-import { signOut } from "next-auth/react";
+import { useRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
 import useSpotify from "@/hooks/useSpotify";
-import Router from "next/router";
-import { playlistIdState, playlistsState } from "../../../atoms/playlistAtom";
-import { useRecoilState, } from "recoil";
+
+// Components
 import PlaceholderImage from "../PlaceholderImage";
+import { HomeIcon, MagnifyingGlassIcon, BuildingLibraryIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
+
+// Atoms
 import { viewState } from "../../../atoms/viewAtom";
+import { playlistIdState, playlistsState } from "../../../atoms/playlistAtom";
+import { imageLoader } from "@/lib/images";
+import { IPlaylist } from "@/types/playlists";
 
 const Sidebar = () => {
     const spotifyApi = useSpotify();
@@ -18,16 +24,18 @@ const Sidebar = () => {
     useEffect(() => {
       if(spotifyApi.getAccessToken()) {
         spotifyApi.getUserPlaylists().then((data) => {
-            setPlaylists(data.body.items);
+            const { body }: { body: any } = data;
+
+            setPlaylists(body.items);
         });
       }
     }, [session, spotifyApi]);
 
-    useEffect(() => {
-      if(spotifyApi.getAccessToken()) {
-        console.log(activeView);
-      }
-    }, [session, activeView]);
+    // useEffect(() => {
+    //   if(spotifyApi.getAccessToken()) {
+        
+    //   }
+    // }, [session, activeView]);
 
 
     return (
@@ -85,8 +93,8 @@ const Sidebar = () => {
 
                     <hr className="border-t-[0.1px] border-neutral-500"/>
 
-                    {playlists.map((playlist) => {
-                            const { id, name, images, type }: { id: any, name: any} = playlist;
+                    {playlists.map((playlist: IPlaylist) => {
+                            const { id, name, images, type } = playlist;
                             const isActive = playlistId == id && activeView == 'playlist' ? 'bg-neutral-700' : '';
                             return (
                                 <button key={id} 
@@ -95,17 +103,21 @@ const Sidebar = () => {
                                             setActiveView('playlist');
                                         }}
                                         className={`flex items-center w-full p-2 text-sm text-gray-900 transition duration-75 rounded-lg group hover:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600 cursor-pointer ${isActive}`}>
-                                     {
-                                        images?.length > 0 ?
-                                        (
-                                            <img src={images[0].url} alt={`${name} ${type}`} className="w-10 h-10" />
-                                        ) :
-                                        (
-                                            <PlaceholderImage classes={`w-10 h-10 bg-neutral-600`} />
-                                        )
-                                    }
-            
-                                    {/* <img src={images[0].url} alt={`${name} ${type}`} className="w-10 h-10" />    */}
+                                        {images?.length > 0 ? (
+                                                <Image 
+                                                    loader={imageLoader}
+                                                    width={200}
+                                                    height={200}
+                                                    quality={100}
+                                                    src={images[0].url} 
+                                                    alt={`${name} ${type}`} 
+                                                    className="w-10 h-10"
+                                                />
+                
+                                            ) : (
+                                                <PlaceholderImage classes={`w-10 h-10 bg-neutral-600`} />
+                                        )}
+    
                                     <span className="flex-1 ml-3 text-left whitespace-nowrap">{name}</span>
                                 </button>
                             )

@@ -1,33 +1,44 @@
-import { Session } from "next-auth";
+
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserCircleIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 import { signOut } from "next-auth/react";
 import useSpotify from "@/hooks/useSpotify";
+import { imageLoader } from "@/lib/images";
+
+import Image from "next/image";
+
 
 const classNames = (...classes: string[]) => {
     return classes.filter(Boolean).join(' ');
 }
 
 
-const Image = ({session}: {session: Session}) => {
-        if(session?.user?.image) {
-            return <img  src={session?.user?.image}  className="rounded-full h-7 w-7"  alt="Profile Image" />
-        } 
-        return <UserCircleIcon className="rounded-full h-7 w-7"/>
-}
 
 const UserHeaderMenu = ({ session, status }: { session: any, status: String }) => {
-    // const accountLink = spotifyApi.getUser();
-    const spotifyApi = useSpotify();
-
-    if(status === 'loading' && !session) return null;
     
+    const spotifyApi = useSpotify();
+    if(status === 'loading' && !session) return null;
+
     return (
         <Menu as="div" className="z-1 inline-block text-left absolute top-5 right-8">
             <div>
                 <Menu.Button className="flex items-center bg-neutral-900  opacity-90 hover:opacity-80 cursor-pointer rounded-full p-0.5">
-                    <Image session={session} />
+                    {
+                        session?.user?.image ? (
+                            <Image
+                                loader={imageLoader}
+                                src={session?.user?.image}  
+                                width={70}
+                                height={70}
+                                quality={100}
+                                className="rounded-full h-7 w-7"  
+                                alt="Profile Image"
+                            />
+                        ) : (
+                            <UserCircleIcon className="rounded-full h-7 w-7"/>
+                        ) 
+                    }
                 </Menu.Button>
                 <Transition
                     as={Fragment}

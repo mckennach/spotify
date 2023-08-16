@@ -4,9 +4,11 @@ import { ImageLoader } from "next/image";
 import { imageLoader } from "@/lib/images";
 import PlaceholderImage from "../PlaceholderImage";
 import { millisToMinutesAndSeconds } from "@/lib/time";
+import { IImage, IImageArray } from "@/types/types";
+import { IArtist, ITrack } from "@/types/tracks";
 const SearchTopResult = ({ searchData }: { searchData: any }) => {
     const [ topArtist, setTopArtist ] = useState(false);
-    const [ topSongs, setTopSongs ] = useState(false);
+    const [ topSongs, setTopSongs ] = useState([]);
     const searchItems = searchData ? searchData?.artists.items : false;
     useEffect(() => {
         if(searchData) {
@@ -15,6 +17,8 @@ const SearchTopResult = ({ searchData }: { searchData: any }) => {
         }
         
     }, [searchData]);
+
+    
 
     if(!topArtist) return (
         <div className="basis-1/2">
@@ -37,8 +41,9 @@ const SearchTopResult = ({ searchData }: { searchData: any }) => {
         </div>
     );
 
-    console.log(topSongs)
-    
+    // const artistImages: any = topArtist ? topArtist['images'] : [];
+    // const artistName: String = topArtist ? topArtist['name'] : '';
+    const { images, name, type }: any = topArtist;
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full ml-0">
@@ -47,13 +52,13 @@ const SearchTopResult = ({ searchData }: { searchData: any }) => {
                 <div className="rounded-md p-6  w-full hover:bg-neutral-600  transition-all ease-in-out h-auto duration-600 cursor-pointer">
                     <div className="flex flex-col space-y-4">
                         <div className="rounded-full overflow-hidden h-32 w-32">
-                            { topArtist?.images.length > 0 ? (
+                            { images.length > 0 ? (
                                 <Image 
-                                    src={topArtist?.images?.[0].url}
+                                    src={images?.[0].url}
                                     loader={imageLoader}
-                                    alt={`${topArtist.name}`}
-                                    width={topArtist?.images?.[0].width}
-                                    height={topArtist?.images?.[0].height}
+                                    alt={name}
+                                    width={images[0].width}
+                                    height={images[0].height}
                                     quality={100}
                                 />
                             ) : (
@@ -61,9 +66,9 @@ const SearchTopResult = ({ searchData }: { searchData: any }) => {
                             )}
                         </div>
                         <div className="flex-1 space-y-3">
-                            <h2 className="text-2xl font-bold">{ topArtist.name }</h2>
+                            <h2 className="text-2xl font-bold">{ name }</h2>
                             <div className="space-y-3">
-                                <p className="capitalize">{ topArtist.type }</p>
+                                <p className="capitalize">{ type }</p>
                             </div>
                         </div>
                     </div>
@@ -74,24 +79,26 @@ const SearchTopResult = ({ searchData }: { searchData: any }) => {
                 <div className="rounded-md px-4 py-6 w-full   transition-all ease-in-out duration-600 cursor-pointer h-auto">
                     <ul className="list-none ">
                         {
-                            topSongs ? (
-                                topSongs.map((song) => {
-                                    const { artists, duration_ms: duration } = song;
-                                    const artistList = artists.map(artist => artist.name).join(',');
+                            topSongs.length > 0 ? (
+                                topSongs.map((song: ITrack) => {
+                                    const { name, artists, duration_ms: duration, id }: any = song;
+                                    const artistList = artists ? artists.map((artist: IArtist) => artist.name).join(',') : '';
+                                    const url: any = song?.album?.images?.[0]['url'];
+                                    // const name: any = song?.name;
                                     return (
-                                        <li className="flex justify-between items-center hover:bg-neutral-600 p-[0.29rem] ">
+                                        <li key={id} className="flex justify-between items-center hover:bg-neutral-600 p-[0.29rem] ">
                                             <div className="flex space-x-4">
                                                 <Image 
-                                                    src={song?.album?.images?.[0].url}
+                                                    src={url}
                                                     loader={imageLoader}
-                                                    alt={`${song.name}`}
-                                                    width={song?.album?.images?.[0].width}
-                                                    height={song?.album?.images?.[0].height}
+                                                    alt={name}
+                                                    width={150}
+                                                    height={150}
                                                     quality={100}
                                                     className="w-11 h-11"
                                                 />
                                                 <div>
-                                                    <p className="text-sm text-white">{song.name}</p>
+                                                    <p className="text-sm text-white">{name}</p>
                                                     <p className="text-xs text-neutral-500">{ artistList }</p>
                                                 </div>
                                                 
@@ -103,7 +110,7 @@ const SearchTopResult = ({ searchData }: { searchData: any }) => {
                                     )
                                 })
                             ) : (
-                                    <li>No Song</li>
+                                <li>No Songs</li>
                             )
                         }
                     </ul>

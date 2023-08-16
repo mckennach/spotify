@@ -27,7 +27,8 @@ const Player = () => {
         if(!songInfo) {
             spotifyApi.getMyCurrentPlayingTrack()
             .then(data => {
-                setCurrentTrackId(data.body?.item?.id)
+                const trackId = data?.body?.item ? data.body.item.id : '';
+                setCurrentTrackId(trackId)
             });
           
             spotifyApi.getMyCurrentPlaybackState()
@@ -60,24 +61,24 @@ const Player = () => {
     const checkProgress = () => {
         spotifyApi.getMyCurrentPlaybackState()
         .then(data => {
-            setTrackProgress(data.body.progress_ms);
+            const progress: number = data.body.progress_ms != null ? data.body.progress_ms : 0;
+            setTrackProgress(progress);
         });
     }
 
 
     const debouncedAdjustVolume = useCallback(
       debounce((volume) => {
-        spotifyApi.setVolume(volume).catch(err => {});
+
+        spotifyApi.setVolume(parseInt(volume)).catch(err => {});
       }, 1000), []
     )
 
     
-  
-        
+    
     return (
         <div className="sticky bottom-0 z-10  bg-gradient-to-b from-neutral-900 to-neutral-800 text-neutral-500">
             <div className="flex w-full p-3 justify-between items-center">
-
                 {
                     songInfo ? (
                         <PlayerSongView songInfo={songInfo} />

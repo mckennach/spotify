@@ -13,10 +13,11 @@ const HomeView = () => {
     const [ isPlaying, setIsPlaying ] = useRecoilState(isPlayingState);
     const playlists = useRecoilValue(playlistsState);
     const [ greeting, setGreeting ] = useState('Good Morning') 
-    const today = new Date()
-    const curHr = today.getHours()
+    
 
     useEffect(() => {
+        const today = new Date()
+        const curHr = today.getHours()
         if (curHr < 12) {
             setGreeting('Good Morning');
         } else if (curHr < 18) {
